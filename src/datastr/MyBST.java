@@ -94,30 +94,90 @@ public class MyBST<Ttype> {
 	}
 	
 	public void print() throws Exception{
-		if(isEmpty()) {
-			throw new Exception("Nav ko printet");
+		if(isEmpty())
+		{
+			throw new Exception("BST ir tukšs, līdz ar to nav iespējams izprintēt elementus");
 		}
+		
 		printHelp(root);
+		
 	}
 	
-	private void printHelp(MyNode <Ttype> currentNode) {
+	private void printHelp(MyNode<Ttype> currentNode) {
+	
+		System.out.println("P ->" + currentNode.getElement());
 		
-		System.out.println(currentNode.getElement());
 		
-		if(currentNode.getLeftChildNode() != null ) {
-			System.out.println("Kreisais berns: " 
+		//pārbaudam, vai eksistē kreisais bērns
+		if(currentNode.getLeftChildNode() != null)
+		{
+			System.out.println("Kreisais bērns: " 
 					+ currentNode.getLeftChildNode().getElement()
-					+ "(" + currentNode.getElement() + ")");
-			printHelp (currentNode.getLeftChildNode());
+					+ " (" + currentNode.getElement() + ")");
+			printHelp(currentNode.getLeftChildNode());
 		}
 		
-		if(currentNode.getRightChildNode() !=null) {
-			System.out.println("Labais berns: " 
+		//pārbaudām, vai eksistē labais bērns
+		if(currentNode.getRightChildNode() != null)
+		{
+			System.out.println("Labais bērns: " 
 					+ currentNode.getRightChildNode().getElement()
-					+ "(" + currentNode.getElement() + ")");
-			printHelp (currentNode.getRightChildNode());
-			
+					+ " (" + currentNode.getElement() + ")");
+			printHelp(currentNode.getRightChildNode());
 		}
+		
 	}
 	
+	public boolean search(Ttype searchElement) throws Exception
+	{
+		if(isEmpty())
+		{
+			throw new Exception("BST ir tukšs, līdz ar to nav iespējams meklēt elementus");
+		}
+		
+		if(searchElement == null)
+		{
+			throw new Exception("Padotais elements nedrīkst būt kā null");
+		}
+		
+		return searchHelp(root, searchElement);
+	}
+	
+	
+	private boolean searchHelp(MyNode<Ttype> currentNode, Ttype searchElement)
+	{
+		//pārbaudam, vai currentNode elements sakrīt ar melkēto
+		if(currentNode.getElement().equals(searchElement))
+		{
+			return true;
+		}//veikt meklēšanu tālāk pa kreiso vai labo pusi
+		else
+		{
+			//jāturpina meklēšana pa labo pusi
+			if( ((Comparable)searchElement).compareTo(currentNode.getElement()) == 1 )
+			{
+				//ja labais bērns eksistē, tad turpinām pa labo pusi
+				if(currentNode.getRightChildNode() != null)
+				{
+					//return jālieto tad, ja rekursīva funkcija nav void
+					return searchHelp(currentNode.getRightChildNode(), searchElement);
+				}
+			}
+			//jāturpina meklēšana pa kreiso pusi
+			else if( ((Comparable)searchElement).compareTo(currentNode.getElement()) == -1 )
+			{
+				if(currentNode.getLeftChildNode() != null)
+				{
+					return searchHelp(currentNode.getLeftChildNode(), searchElement);
+				}
+			}
+		}
+		
+		return false;
+	}
+
+	
+	
+	//izveidot search funkciju, kas isEmpty pārbaude
+	//izsaucam search helper funkciju, saakot no root
 }
